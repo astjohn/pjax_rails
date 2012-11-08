@@ -27,9 +27,9 @@
 // the options object.
 //
 // Returns the jQuery object
-function fnPjax(selector, container, options) {
+function fnPjax(container, options) {
   var context = this
-  return this.on('click.pjax', selector, function(event) {
+  return this.on('click.pjax', function(event) {
     var opts = $.extend({}, optionsFor(container, options))
     if (!opts.container)
       opts.container = $(this).attr('data-pjax') || context
@@ -56,9 +56,7 @@ function fnPjax(selector, container, options) {
 //  })
 //
 // Returns nothing.
-function handleClick(event, container, options) {
-  options = optionsFor(container, options)
-
+function handleClick(event, options) {
   var link = event.currentTarget
 
   if (link.tagName.toUpperCase() !== 'A')
@@ -300,10 +298,10 @@ function pjax(options) {
   if ( xhr && xhr.readyState < 4) {
     xhr.onreadystatechange = $.noop
     xhr.abort()
+  } else {
+    pjax.options = options
+    var xhr = pjax.xhr = $.ajax(options)
   }
-
-  pjax.options = options
-  var xhr = pjax.xhr = $.ajax(options)
 
   if (xhr.readyState > 0) {
     if (options.push && !options.replace) {

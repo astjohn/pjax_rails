@@ -2,7 +2,7 @@ module Pjax
   extend ActiveSupport::Concern
 
   included do
-    layout proc { |c| pjax_request? ? pjax_layout : current_layout }
+    layout proc { |c| pjax_request? ? pjax_layout : defined_layout }
     helper_method :pjax_request?
 
     rescue_from Pjax::Unsupported, :with => :pjax_unsupported
@@ -31,8 +31,8 @@ module Pjax
       false
     end
 
-    def current_layout
-      self.send(:_default_layout) || 'application'
+    def defined_layout
+      self.respond_to?(:current_layout) ? current_layout : 'application'
     end
 
     def pjax_container

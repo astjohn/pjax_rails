@@ -298,10 +298,10 @@ function pjax(options) {
   if ( xhr && xhr.readyState < 4) {
     xhr.onreadystatechange = $.noop
     xhr.abort()
-  } else {
-    pjax.options = options
-    var xhr = pjax.xhr = $.ajax(options)
   }
+
+  pjax.options = options
+  var xhr = pjax.xhr = $.ajax(options)
 
   if (xhr.readyState > 0) {
     if (options.push && !options.replace) {
